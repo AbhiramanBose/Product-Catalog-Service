@@ -9,4 +9,6 @@ public interface IProductService {
     List<Product> getAllProducts();
     Product replaceProduct(Long productId, Product request);
     Product createProduct(Product request);
+
+    Product save(Product product);
 }

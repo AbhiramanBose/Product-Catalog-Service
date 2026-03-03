@@ -4,8 +4,10 @@ import com.pm.productcatalogservice.dtos.CategoryDto;
 import com.pm.productcatalogservice.dtos.ProductDto;
 import com.pm.productcatalogservice.models.Category;
 import com.pm.productcatalogservice.models.Product;
+import com.pm.productcatalogservice.models.State;
 import com.pm.productcatalogservice.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -13,6 +15,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -20,7 +23,12 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
+    @Qualifier("sps")
     private IProductService productService;
+
+//    @Autowired
+//    @Qualifier("fkps")
+//    private IProductService productService;
 
     @GetMapping
     public List<ProductDto> getAllProducts(){
@@ -84,12 +92,16 @@ public class ProductController {
     private Product from(ProductDto productDto){
         Product product = new Product();
         product.setId(productDto.getId());
+//        product.setCreatedAt(new Date());
+//        product.setLastUpdatedAt(new Date());
+//        product.setState(State.ACTIVE);
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
         product.setImageUrl(productDto.getImageUrl());
         if(productDto.getCategory()!=null){
             Category category = new Category();
+            category.setId(productDto.getCategory().getId());
             category.setName(productDto.getCategory().getName());
 
 
@@ -100,7 +112,7 @@ public class ProductController {
 
     @PostMapping
     public ProductDto createProduct(@RequestBody ProductDto product){
-        Product f= productService.createProduct(from(product));
+        Product f= productService.save(from(product));
         return from(f);
     }
 

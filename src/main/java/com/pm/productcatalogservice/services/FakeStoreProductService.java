@@ -20,13 +20,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Service
+@Service("fkps")
 public class FakeStoreProductService extends FakeStoreProductDto implements IProductService{
     @Autowired
     private RestTemplateBuilder restTemplateBuilder; //why autowired to manage many dependencies that's why we use autowired annotation
 
     @Autowired
     private FakeStoreApiClient fakeStoreApiClient;
+
+
 
     public Product getProductById(Long productId){
 
@@ -76,6 +78,11 @@ public class FakeStoreProductService extends FakeStoreProductDto implements IPro
         FakeStoreProductDto fakeStoreProductDto = from(request);
         FakeStoreProductDto response=requestForEntity("https://fakestoreapi.com/products",HttpMethod.POST,fakeStoreProductDto,FakeStoreProductDto.class).getBody();
         return from(response);
+    }
+
+    @Override //TO DO
+    public Product save(Product product) {
+        return null;
     }
 
     private <T> ResponseEntity<T> requestForEntity(String url,HttpMethod httpMethod ,@Nullable Object request, Class<T> responseType, Object... uriVariables) throws RestClientException {
